@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Profile | CU Fitness</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'myapp/logo.png' %}" />
+    <!-- Font Awesome CSS (Add this to use Font Awesome icons) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    {% comment %}
+    <link rel="stylesheet" href="{% static 'myapp/styles.css' %}" />
+    {% endcomment %}
+    <!--query added to update the styles file everytime-->
+    <link
+      rel="stylesheet"
+      href="{% static 'myApp/styles.css' %}?v={{ timestamp }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'myApp/css/ai_agent.css' %}?v={{ timestamp }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'myApp/css/edit_profile.css' %}?v={{ timestamp }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header class="header">
+      <div class="container">
+        <div class="logo" onclick="goHome()">
+          <img src="{% static 'myapp/logo.png' %}" alt="CUFitness Logo" />
+          <span>CUFitness</span>
+        </div>
+        <div class="navbar-wrapper">
+          <span>Hi, {{ request.user.username }}</span>
+          <div class="cta">
+            {% if request.user.is_authenticated %}
+            <!-- Show dashboard button for authenticated users -->
+            <!-- <a href="#" class="btn-dashboard">Dashboard</a> -->
+
+            <!-- Profile Icon and Dropdown -->
+            <div class="profile-dropdown">
+              <button class="profile-icon" onclick="toggleProfileDropdown()">
+                <i class="fas fa-user-circle"></i>
+                <!-- Font Awesome person icon -->
+              </button>
+              <div class="dropdown-content" id="dropdownContent">
+                <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
+                <a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="{% url 'user_logout' %}"
+                  ><i class="fas fa-sign-out-alt"></i> Logout</a
+                >
+                <!-- Additional option -->
+              </div>
+            </div>
+            {% else %}
+            <a href="{% url 'log__in' %}" class="btn-login">Login</a>
+            <div class="vl"></div>
+            <a href="{% url 'sign__up' %}" class="btn-register">Sign Up</a>
+            <!-- Show login/signup buttons for unauthenticated users -->
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="edit-profile-container">
+        <h1>Edit Profile</h1>
+        <form method="post" class="edit-profile-form">
+            {% csrf_token %}
+            <h2>Personal Information</h2>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" value="{{ user.username }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" value="{{ user.phone }}">
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" value="{{ user.age }}">
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender">
+                    <option value="">Select Gender</option>
+                    <option value="Male" {% if user.gender == "Male" %}selected{% endif %}>Male</option>
+                    <option value="Female" {% if user.gender == "Female" %}selected{% endif %}>Female</option>
+                    <option value="Other" {% if user.gender == "Other" %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+
+            <h2>Fitness Questionnaire</h2>
+            <div class="form-group">
+                <label for="fitness_goals">Fitness Goals:</label>
+                <input type="text" id="fitness_goals" name="fitness_goals" value="{{ user.questionnaire.fitness_goals }}">
+            </div>
+            <div class="form-group">
+                <label for="body_type">Body Type:</label>
+                <input type="text" id="body_type" name="body_type" value="{{ user.questionnaire.body_type }}">
+            </div>
+            <div class="form-group">
+                <label for="daily_caloric_need">Daily Caloric Need:</label>
+                <input type="number" id="daily_caloric_need" name="daily_caloric_need" value="{{ user.questionnaire.daily_caloric_need }}">
+            </div>
+            <div class="form-group">
+                <label for="workout_frequency">Workout Frequency:</label>
+                <input type="text" id="workout_frequency" name="workout_frequency" value="{{ user.questionnaire.workout_frequency }}">
+            </div>
+            <div class="form-group">
+                <label for="macronutrient_ratio">Macronutrient Ratio:</label>
+                <input type="text" id="macronutrient_ratio" name="macronutrient_ratio" value="{{ user.questionnaire.macronutrient_ratio }}">
+            </div>
+            <div class="form-group">
+                <label for="dietary_restrictions">Dietary Restrictions:</label>
+                <input type="text" id="dietary_restrictions" name="dietary_restrictions" value="{{ user.questionnaire.dietary_restrictions }}">
+            </div>
+            <div class="form-group">
+                <label for="sleep_hours">Sleep Hours:</label>
+                <input type="number" id="sleep_hours" name="sleep_hours" value="{{ user.questionnaire.sleep_hours }}">
+            </div>
+            <div class="form-group">
+                <label for="work_schedule">Work Schedule:</label>
+                <input type="text" id="work_schedule" name="work_schedule" value="{{ user.questionnaire.work_schedule }}">
+            </div>
+            <div class="form-group">
+                <label for="supplements">Supplements:</label>
+                <input type="text" id="supplements" name="supplements" value="{{ user.questionnaire.supplements }}">
+            </div>
+            <div class="form-group">
+                <label for="water_intake">Water Intake:</label>
+                <input type="text" id="water_intake" name="water_intake" value="{{ user.questionnaire.water_intake }}">
+            </div>
+
+            <button type="submit" class="submit-button">Save Changes</button>
+        </form>
+    </div>
+  </body>
+  <script src="{% static 'myapp/js/home.js' %}"></script>
+</html>

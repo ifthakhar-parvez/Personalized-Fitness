@@ -1,0 +1,514 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CUFitness | Your Campus Fitness & Nutrition Companion</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'myapp/logo.png' %}" />
+    <!-- Font Awesome CSS (Add this to use Font Awesome icons) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    {% comment %}
+    <link rel="stylesheet" href="{% static 'myapp/styles.css' %}" />
+    {% endcomment %}
+    <!--query added to update the styles file everytime-->
+    <link
+      rel="stylesheet"
+      href="{% static 'myapp/styles.css' %}?v={{ timestamp }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'myapp/css/ai_agent.css' %}?v={{ timestamp }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header class="header">
+      <div class="container">
+        <div class="logo" onclick="goHome()">
+          <img src="{% static 'myapp/logo.png' %}" alt="CUFitness Logo" />
+          <span>CUFitness</span>
+        </div>
+        <div class="navbar-wrapper">
+          <nav class="navbar">
+            <ul>
+              <li><a href="#explore">Explore</a></li>
+              <li><a href="#fitness">Fitness</a></li>
+              <li><a href="#nutrition">Nutrition</a></li>
+              <li><a href="#settings">Settings</a></li>
+            </ul>
+          </nav>
+          <div class="cta">
+            {% if request.user.is_authenticated %}
+            <!-- Show dashboard button for authenticated users -->
+            <!-- <a href="#" class="btn-dashboard">Dashboard</a> -->
+
+            <!-- Profile Icon and Dropdown -->
+            <div class="profile-dropdown">
+              <button class="profile-icon" onclick="toggleProfileDropdown()">
+                <i class="fas fa-user-circle"></i>
+                <!-- Font Awesome person icon -->
+              </button>
+              <div class="dropdown-content" id="dropdownContent">
+                <a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="{% url 'edit_profile' %}"
+                  ><i class="fas fa-user-edit"></i> Edit Profile</a
+                >
+                <a href="{% url 'user_logout' %}"
+                  ><i class="fas fa-sign-out-alt"></i> Logout</a
+                >
+                <!-- Additional option -->
+              </div>
+            </div>
+            {% else %}
+            <a href="{% url 'log__in' %}" class="btn-login">Login</a>
+            <div class="vl"></div>
+            <a href="{% url 'sign__up' %}" class="btn-register">Sign Up</a>
+            <!-- Show login/signup buttons for unauthenticated users -->
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Empowering Concordia to Achieve Fitness Goals</h1>
+          <p>
+            Your personalized fitness and nutrition platform designed for
+            students, faculty, and staff.
+          </p>
+          <!-- <a href="#signup" class="btn-secondary">Get Started</a> -->
+        </div>
+        <div class="hero-image">
+          <img
+            src="{% static 'myapp/h1_hero.png' %}"
+            alt="Fitness Illustration"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2>Why Choose CUFitness?</h2>
+        <div class="feature-cards">
+          <div class="card">
+            <img
+              src="{% static 'myapp/personalized.png' %}"
+              alt="Personalized Plans"
+            />
+            <h3>Personalized Plans</h3>
+            <p>
+              Tailored fitness and nutrition plans to fit your busy schedule.
+            </p>
+          </div>
+          <div class="card">
+            <img
+              src="{% static 'myapp/community.png' %}"
+              alt="Community Support"
+            />
+            <h3>Community Support</h3>
+            <p>Connect with fellow Concordia students and stay motivated.</p>
+          </div>
+          <div class="card">
+            <img src="{% static 'myapp/affordable.png' %}" alt="Affordable" />
+            <h3>Affordable</h3>
+            <p>Access premium features at no cost to Concordia members.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Explore Section -->
+    <section id="explore" class="page-intro">
+      <div class="container">
+        <h2>Explore CUFitness</h2>
+        <p>
+          CUFitness is a web-based platform designed exclusively for the
+          Concordia University community. We understand the unique challenges
+          students, faculty, and staff face when trying to maintain a healthy
+          lifestyle. Our mission is to provide innovative tools and resources to
+          help you achieve your fitness and nutrition goals.
+        </p>
+        <a href="/explore" class="btn-secondary"
+          >View more <i class="fa fa-external-link"></i
+        ></a>
+      </div>
+    </section>
+
+    <!-- Fitness Section -->
+    <section id="fitness" class="page-intro bg-white">
+      <div class="container">
+        <h2>Personalized Fitness</h2>
+        <p>
+          Staying active as a student can be tough, but CUFitness makes it
+          easier. Get personalized workout plans tailored to your schedule,
+          fitness level, and goals. Whether you're looking for quick dorm
+          workouts or full gym routines, we've got you covered.
+        </p>
+        <a href="/fitness" class="btn-secondary"
+          >View more <i class="fa fa-external-link"></i
+        ></a>
+      </div>
+    </section>
+
+    <!-- Nutrition Section -->
+    <section id="nutrition" class="page-intro">
+      <div class="container">
+        <h2>Personalized Nutrition</h2>
+        <p>
+          Fuel your body with the right nutrition. Get meal plans, healthy
+          recipes, and diet tips that align with your fitness goals. Whether you
+          need quick, budget-friendly meals or guidance on balanced eating,
+          CUFitness has you covered.
+        </p>
+        <a href="/nutrition" class="btn-secondary"
+          >View more <i class="fa fa-external-link"></i
+        ></a>
+      </div>
+    </section>
+
+    <!-- Settings Section -->
+    <section id="settings" class="page-intro bg-white">
+      <div class="container">
+        <h2>Privacy & Settings</h2>
+        <p>
+          Your fitness journey, your way. Manage your privacy preferences,
+          update your goals, and customize your CUFitness experience. Stay in
+          control of your data while tailoring the platform to fit your needs.
+        </p>
+        <a href="/privacy-settings" class="btn-secondary"
+          >View more <i class="fa fa-external-link"></i
+        ></a>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+      <div class="container">
+        <h2>Contact Us</h2>
+        <form action="#" method="post">
+          <input type="text" name="name" placeholder="Your Name" required />
+          <input type="email" name="email" placeholder="Your Email" required />
+          <textarea
+            name="message"
+            placeholder="Your Message"
+            rows="5"
+            required
+          ></textarea>
+          <button type="submit" class="btn-register">Send Message</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container">
+      <!-- Chatbot Button -->
+      <button class="chatbot-button" onclick="toggleChatBox()">
+        <i class="fa fa-robot"></i>
+      </button>
+      <!-- Chatbox -->
+      <div class="chatbox" id="chatbox">
+        <!-- Chatbox Header -->
+        <div class="chatbox-header">
+          <span>AI Fitness Agent</span>
+          <button class="close-button" onclick="toggleChatBox()">
+            <i class="fa-solid fa-circle-xmark"></i>
+          </button>
+        </div>
+        <!-- Chatbox Messages -->
+        <div class="chatbox-messages" id="chatbox-messages">
+          <!-- Example messages -->
+          <div class="message bot-message">
+            Hello! How can I assist you today?
+          </div>
+        </div>
+        <!-- Chatbox Input -->
+        <div class="chatbox-input">
+          <input type="text" id="chatbox-input" placeholder="Ask me..." />
+          <button onclick="sendMessage()">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2023 CUFitness. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="{% static 'myapp/js/home.js' %}"></script>
+  </body>
+</html>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CUFitness | Your Campus Fitness & Nutrition Companion</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'myapp/logo.png' %}" />
+    <!-- Font Awesome CSS (Add this to use Font Awesome icons) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    {% comment %}
+    <link rel="stylesheet" href="{% static 'myapp/styles.css' %}" />
+    {% endcomment %}
+    <!--query added to update the styles file everytime-->
+    <link
+      rel="stylesheet"
+      href="{% static 'myapp/styles.css' %}?v={{ timestamp }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'myapp/css/ai_agent.css' %}?v={{ timestamp }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header class="header">
+      <div class="container">
+        <div class="logo" onclick="goHome()">
+          <img src="{% static 'myapp/logo.png' %}" alt="CUFitness Logo" />
+          <span>CUFitness</span>
+        </div>
+        <div class="navbar-wrapper">
+          <nav class="navbar">
+            <ul>
+              <li><a href="#explore">Explore</a></li>
+              <li><a href="#fitness">Fitness</a></li>
+              <li><a href="#nutrition">Nutrition</a></li>
+              <li><a href="#settings">Settings</a></li>
+            </ul>
+          </nav>
+          <div class="cta">
+            {% if request.user.is_authenticated %}
+            <!-- Show dashboard button for authenticated users -->
+            <!-- <a href="#" class="btn-dashboard">Dashboard</a> -->
+
+            <!-- Profile Icon and Dropdown -->
+            <div class="profile-dropdown">
+              <button class="profile-icon" onclick="toggleProfileDropdown()">
+                <i class="fas fa-user-circle"></i>
+                <!-- Font Awesome person icon -->
+              </button>
+              <div class="dropdown-content" id="dropdownContent">
+                <a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="{% url 'edit_profile' %}"
+                  ><i class="fas fa-user-edit"></i> Edit Profile</a
+                >
+                <a href="{% url 'user_logout' %}"
+                  ><i class="fas fa-sign-out-alt"></i> Logout</a
+                >
+                <!-- Additional option -->
+              </div>
+            </div>
+            {% else %}
+            <a href="{% url 'log__in' %}" class="btn-login">Login</a>
+            <div class="vl"></div>
+            <a href="{% url 'sign__up' %}" class="btn-register">Sign Up</a>
+            <!-- Show login/signup buttons for unauthenticated users -->
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Empowering Concordia to Achieve Fitness Goals</h1>
+          <p>
+            Your personalized fitness and nutrition platform designed for
+            students, faculty, and staff.
+          </p>
+          <!-- <a href="#signup" class="btn-secondary">Get Started</a> -->
+        </div>
+        <div class="hero-image">
+          <img
+            src="{% static 'myapp/h1_hero.png' %}"
+            alt="Fitness Illustration"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2>Why Choose CUFitness?</h2>
+        <div class="feature-cards">
+          <div class="card">
+            <img
+              src="{% static 'myapp/personalized.png' %}"
+              alt="Personalized Plans"
+            />
+            <h3>Personalized Plans</h3>
+            <p>
+              Tailored fitness and nutrition plans to fit your busy schedule.
+            </p>
+          </div>
+          <div class="card">
+            <img
+              src="{% static 'myapp/community.png' %}"
+              alt="Community Support"
+            />
+            <h3>Community Support</h3>
+            <p>Connect with fellow Concordia students and stay motivated.</p>
+          </div>
+          <div class="card">
+            <img src="{% static 'myapp/affordable.png' %}" alt="Affordable" />
+            <h3>Affordable</h3>
+            <p>Access premium features at no cost to Concordia members.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Explore Section -->
+    <section id="explore" class="page-intro">
+      <div class="container">
+        <h2>Explore CUFitness</h2>
+        <p>
+          CUFitness is a web-based platform designed exclusively for the
+          Concordia University community. We understand the unique challenges
+          students, faculty, and staff face when trying to maintain a healthy
+          lifestyle. Our mission is to provide innovative tools and resources to
+          help you achieve your fitness and nutrition goals.
+        </p>
+        <a href="/explore" class="btn-secondary"
+          >View more <i class="fa fa-external-link"></i
+        ></a>
+      </div>
+    </section>
+
+    <!-- Fitness Section -->
+    <section id="fitness" class="page-intro bg-white">
+      <div class="container">
+        <h2>Personalized Fitness</h2>
+        <p>
+          Staying active as a student can be tough, but CUFitness makes it
+          easier. Get personalized workout plans tailored to your schedule,
+          fitness level, and goals. Whether you're looking for quick dorm
+          workouts or full gym routines, we've got you covered.
+        </p>
+        <a href="/fitness" class="btn-secondary"
+          >View more <i class="fa fa-external-link"></i
+        ></a>
+      </div>
+    </section>
+
+    <!-- Nutrition Section -->
+    <section id="nutrition" class="page-intro">
+      <div class="container">
+        <h2>Personalized Nutrition</h2>
+        <p>
+          Fuel your body with the right nutrition. Get meal plans, healthy
+          recipes, and diet tips that align with your fitness goals. Whether you
+          need quick, budget-friendly meals or guidance on balanced eating,
+          CUFitness has you covered.
+        </p>
+        <a href="/nutrition" class="btn-secondary"
+          >View more <i class="fa fa-external-link"></i
+        ></a>
+      </div>
+    </section>
+
+    <!-- Settings Section -->
+    <section id="settings" class="page-intro bg-white">
+      <div class="container">
+        <h2>Privacy & Settings</h2>
+        <p>
+          Your fitness journey, your way. Manage your privacy preferences,
+          update your goals, and customize your CUFitness experience. Stay in
+          control of your data while tailoring the platform to fit your needs.
+        </p>
+        <a href="/privacy-settings" class="btn-secondary"
+          >View more <i class="fa fa-external-link"></i
+        ></a>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+      <div class="container">
+        <h2>Contact Us</h2>
+        <form action="#" method="post">
+          <input type="text" name="name" placeholder="Your Name" required />
+          <input type="email" name="email" placeholder="Your Email" required />
+          <textarea
+            name="message"
+            placeholder="Your Message"
+            rows="5"
+            required
+          ></textarea>
+          <button type="submit" class="btn-register">Send Message</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container">
+      <!-- Chatbot Button -->
+      <button class="chatbot-button" onclick="toggleChatBox()">
+        <i class="fa fa-robot"></i>
+      </button>
+      <!-- Chatbox -->
+      <div class="chatbox" id="chatbox">
+        <!-- Chatbox Header -->
+        <div class="chatbox-header">
+          <span>AI Fitness Agent</span>
+          <button class="close-button" onclick="toggleChatBox()">
+            <i class="fa-solid fa-circle-xmark"></i>
+          </button>
+        </div>
+        <!-- Chatbox Messages -->
+        <div class="chatbox-messages" id="chatbox-messages">
+          <!-- Example messages -->
+          <div class="message bot-message">
+            Hello! How can I assist you today?
+          </div>
+        </div>
+        <!-- Chatbox Input -->
+        <div class="chatbox-input">
+          <input type="text" id="chatbox-input" placeholder="Ask me..." />
+          <button onclick="sendMessage()">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2023 CUFitness. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="{% static 'myapp/js/home.js' %}"></script>
+  </body>
+</html>

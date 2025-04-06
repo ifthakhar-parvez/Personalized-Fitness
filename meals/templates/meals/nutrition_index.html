@@ -1,0 +1,206 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CUFitness - Nutrition Page</title>
+    <link rel="stylesheet" href="{% static 'meals/css/style.css' %}">
+    <!-- Link to the external CSS for the chatbox -->
+    <link rel="stylesheet" type="text/css" href="{% static 'meals/css/chatbot.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="{% static 'meals/images/logo.png' %}" alt="CUFitness Logo">
+                <span>CUFitness</span>
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#profile">Profile</a></li>
+                    <li><a href="#fitness">Fitness</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Vertical Navigation -->
+    <div id="vertical-nav">
+        <a href="#user-input">Set Preferences</a>
+        <a href="#meal-suggestions">Meal Suggestions</a>
+        <a href="#meal-logs">Log Meals</a>
+        <a href="#progress-tracker">Track Progress</a>
+        <a href="#Chat-Box">Chat Box</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- User Input Section -->
+        <section id="user-input">
+            <h2>Set Your Preferences</h2>
+            <form>
+                <label for="goals">Fitness Goals:</label>
+                <select id="goals">
+                    <option value="weight-loss">Weight Loss</option>
+                    <option value="muscle-gain">Muscle Gain</option>
+                    <option value="general-health">General Health</option>
+                </select>
+        
+                <label for="diet">Dietary Preferences:</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="vegan" /> Vegan</label>
+                    <label><input type="checkbox" id="gluten-free" /> Gluten-Free</label>
+                </div>
+        
+                <label for="time">Available Cooking Time:</label>
+                <select id="time">
+                    <option value="15min">Under 15 minutes</option>
+                    <option value="30min">30 minutes</option>
+                    <option value="1hr">1 hour</option>
+                </select>
+        
+                <label for="target-weight">Target Weight Change (kg):</label>
+                <input type="number" id="target-weight" placeholder="Enter desired weight change (positive for gain, negative for loss)" />
+        
+                <label for="budget">Budget (per week):</label>
+                <input type="number" id="budget" />
+        
+                <button type="submit" class="btn-primary">Update Preferences</button>
+            </form>
+        </section>
+        <!-- Chatbox Section -->
+        <section id="Chat-Box">
+            <div id="chat-container">
+                <div id="chat-box"></div>
+                <div id="chat-input-area">
+                  <input type="text" id="chat-input" placeholder="Ask me anything about nutrition...">
+                  <button id="send-btn">Send</button>
+                  <button id="reset-btn">Reset Chat</button>
+                </div>
+              </div>
+                </section>
+        <!-- AI Meal Suggestions - Daily Plan -->
+    <section id="meal-suggestions">
+    <h2>AI-Generated Meal Plan for Today</h2>
+    <div class="daily-meals">
+        <div class="meal-card">
+            <h3>Breakfast: Oatmeal with Berries</h3>
+            <p>Price: $3.50 | Time: 10 min</p>
+            <button class="btn-primary" onclick="toggleRecipe('breakfast-recipe')">View Recipe</button>
+            <div id="breakfast-recipe" class="recipe hidden">
+                <h4>Ingredients:</h4>
+                <ul>
+                    <li>1/2 cup rolled oats</li>
+                    <li>1 cup almond milk</li>
+                    <li>1/2 cup mixed berries</li>
+                    <li>1 tbsp honey</li>
+                </ul>
+                <h4>Preparation:</h4>
+                <p>Cook oats in almond milk for 5 minutes, stir in honey, and top with berries.</p>
+            </div>
+        </div>
+
+        <div class="meal-card">
+            <h3>Lunch: Grilled Chicken Salad</h3>
+            <p>Price: $7.50 | Time: 20 min</p>
+            <button class="btn-primary" onclick="toggleRecipe('lunch-recipe')">View Recipe</button>
+            <div id="lunch-recipe" class="recipe hidden">
+                <h4>Ingredients:</h4>
+                <ul>
+                    <li>1 grilled chicken breast</li>
+                    <li>1 cup mixed greens</li>
+                    <li>1/2 avocado, sliced</li>
+                    <li>1 tbsp olive oil</li>
+                    <li>1 tsp lemon juice</li>
+                </ul>
+                <h4>Preparation:</h4>
+                <p>Slice chicken, mix with greens, avocado, and drizzle with olive oil and lemon juice.</p>
+            </div>
+        </div>
+
+        <div class="meal-card">
+            <h3>Dinner: Quinoa Stir-Fry</h3>
+            <p>Price: $6.00 | Time: 25 min</p>
+            <button class="btn-primary" onclick="toggleRecipe('dinner-recipe')">View Recipe</button>
+            <div id="dinner-recipe" class="recipe hidden">
+                <h4>Ingredients:</h4>
+                <ul>
+                    <li>1 cup cooked quinoa</li>
+                    <li>1/2 cup bell peppers, chopped</li>
+                    <li>1/2 cup broccoli</li>
+                    <li>1 tbsp soy sauce</li>
+                    <li>1 tsp sesame oil</li>
+                </ul>
+                <h4>Preparation:</h4>
+                <p>Stir-fry vegetables in sesame oil, add quinoa and soy sauce, and cook for 5 minutes.</p>
+            </div>
+        </div>
+    </div>
+   </section>
+        <!-- Meal Logging Section - Weekly Log -->
+    <section id="meal-logs"> 
+        <div class="meal-log">
+            <h2>Daily Meal Log</h2>
+            <form id="meal-log-form">
+                <div id="meal-entries">
+                    <div class="meal-entry">
+                        <input type="text" name="food_name[]" placeholder="Food Name" required>
+                        <input type="number" name="quantity[]" placeholder="Quantity" required>
+                        <input type="time" name="time[]" required>
+                        <button type="button" class="remove-entry" onclick="removeEntry(this)">X</button>
+                    </div>
+                </div>
+                <button type="button" id="add-entry">Add Another</button>
+                <button type="submit">Submit Log</button>
+            </form>
+        </div>
+    </section>
+        <!-- Progress Tracking Section - Enhanced Graphical Progress -->
+   <section id="progress-tracker">
+    <div class="progress-section">
+        <!-- Weight Progress Section -->
+        <h2>Weight Progress</h2>
+        <div class="progress-bar-weight">
+            <span></span>
+        </div>
+        <p id="weight-progress-info">Current Weight: <span id="current-weight">65</span> kg | Target Weight: 70 kg</p>
+
+        <!-- Daily Calorie Intake Progress -->
+        <h3>Daily Calorie Intake</h3>
+        <div class="progress-bar-calories">
+            <span></span>
+        </div>
+        <p id="calorie-info">Calories Consumed: <span id="current-calories">1800</span> kcal | Goal: 2500 kcal</p>
+
+        <!-- Past Calorie Intake Graph -->
+        <h3>Past Daily Calorie Intakes</h3>
+        <canvas id="caloriesChart"></canvas>
+
+        <!-- Weekly Budget Progress -->
+        <h3>Weekly Budget</h3>
+        <div class="progress-bar-budget">
+            <span></span>
+        </div>
+        <p id="budget-info">Budget Spent: <span id="current-budget">350</span> | Weekly Budget: 500</p>
+    </div>
+   </section>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 CUFitness. All Rights Reserved.</p>
+        <div class="social-links">
+            <a href="#"><img src="facebook-icon.png" alt="Facebook"></a>
+            <a href="#"><img src="instagram-icon.png" alt="Instagram"></a>
+            <a href="#"><img src="twitter-icon.png" alt="Twitter"></a>
+        </div>
+    </footer>
+    <script src="{% static 'meals/js/main.js' %}"></script>
+    <!-- Include Chatbox JavaScript -->
+<script src="{% static 'meals/js/chatbot.js' %}"></script>
+    
+</body>
+</html>

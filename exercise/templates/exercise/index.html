@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CU_Fitness</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'exercise/styles.css' %}">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+</head>
+<body>
+
+    <header>
+        <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
+
+
+            <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+                <a href="/">
+                    <img src="{% static 'exercise/images/favicon.ico' %}" alt="CU_Fitness Logo" width="40" height="40">
+                </a>
+                <span style="font-size: 24px; font-weight: bold; color: white;">CU_Fitness</span>
+              </div>
+              
+          <nav>
+            <a href="#">Home</a>
+            <a href="#">Profile</a>
+            <a href="#">Nutrition</a>
+          </nav>
+        </div>
+      </header>
+      
+        
+        <!-- ✅ Fitness Image Section (Added before BMI Calculator) -->
+        <!-- ✅ Fixed Fitness Image -->
+<!-- ✅ Fitness Image Before BMI Calculator -->
+<div class="fitness-image">
+    <img src="https://images.pexels.com/photos/669576/pexels-photo-669576.jpeg?auto=compress&cs=tinysrgb&w=800" 
+         alt="Fitness Motivation">
+</div>
+
+<div class="section" id="log-workout-section">
+    <h2>🏋️ Log Your Workout</h2>
+    <input type="text" id="exercise-name" placeholder="Exercise Name">
+    <input type="number" id="sets" placeholder="Sets">
+    <input type="number" id="reps" placeholder="Reps">
+    <input type="number" id="duration" placeholder="Duration (minutes)">
+    <button id="log-workout-btn">Log Workout</button>
+    <div id="log-workout-result"></div>
+</div>
+
+<div class="section" id="workout-progress">
+    <h2>📈 Your Progress & AI Suggestion</h2>
+    <button id="get-progress-btn">Get Progress Suggestion</button>
+    <div id="progress-suggestion" style="margin-top: 10px;"></div>
+</div>
+
+
+<div class="section">
+    <h2>📊 Progress Chart</h2>
+    <canvas id="progressChart" width="400" height="200"style="border: 1px solid red;"></canvas>></canvas>
+  </div>
+
+  
+        <!-- ✅ BMI Calculator Section -->
+        <div class="section bmi-calculator">
+            <h2>BMI Calculator</h2>
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" placeholder="kg" required>
+            <label for="height">Height (m):</label>
+            <input type="number" id="height" placeholder="m" step="0.01" required>
+            <button onclick="calculateBMI()">Calculate BMI</button>
+            <p id="bmi-result"></p>
+        </div>
+
+       
+        <div class="section" id="personalized-workout-section">
+            <h2>🎯 Personalized Workout Plan</h2>
+        
+            <label for="goal-select">Your Goal:</label>
+            <select id="goal-select">
+                <option value="weight_loss">Weight Loss</option>
+                <option value="muscle_gain">Muscle Gain</option>
+                <option value="maintain">Maintain</option>
+            </select>
+        
+            <label for="level-select">Fitness Level:</label>
+            <select id="level-select">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+            </select>
+        
+            <button id="get-plan-btn">Get My Plan</button>
+        
+            <div id="personalized-workout-result" style="margin-top: 15px;"></div>
+        </div>
+
+        <!-- ✅ Custom Rest Timer Section -->
+<div class="section">
+  <h2>⏱️ Custom Rest Timer</h2>
+  <input type="number" id="custom-rest-time" placeholder="Enter rest time in seconds">
+  <button id="start-custom-rest">Start Rest</button>
+  <div id="custom-rest-display" style="margin-top: 10px;"></div>
+</div>
+
+
+
+        <!-- ✅ AI-Generated Adaptive Workout Suggestions -->
+        <div class="section" id="ai-workout-section">
+            <h2>🔥 AI Adaptive Workout Suggestions</h2>
+            
+            <!-- Workout Selection -->
+            <label for="workout-goal">Select Workout Goal:</label>
+            <select id="workout-goal">
+                <option value="muscle_gain">Muscle Gain</option>
+                <option value="weight_loss">Weight Loss</option>
+                <option value="maintain">Maintain</option>
+            </select>
+
+            <button id="fetch-workout-btn">Get Workout Suggestions</button>
+
+            <div id="workout-recommendation">
+                <p>Select a workout goal and click the button to get workout suggestions.</p>
+            </div>
+        </div>
+
+        <!-- ✅ AI-Generated Meal Plan Suggestions -->
+        <div class="section" id="ai-meal-section">
+            <h2>🍽️ AI Meal Plan Suggestions</h2>
+            
+            <!-- Meal Selection -->
+            <label for="meal-type">Select Meal Type:</label>
+            <select id="meal-type">
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+            </select>
+
+            <button id="fetch-meal-btn">Get Meal Suggestions</button>
+
+            <div id="meal-recommendation">
+                <p>Select a meal type and click the button to get meal suggestions.</p>
+            </div>
+        </div>
+
+        <!-- ✅ Chatbot Section -->
+        <div class="section" id="chatbot-section">
+            <h2>Chat with AI</h2>
+            <div class="chatbox" id="chatbox"></div>
+            <input type="text" id="user-message" placeholder="Ask me anything...">
+            <button id="send-message">Send</button>
+        </div>
+
+        <!-- ✅ Footer -->
+        <footer>
+            <div class="motivational-quotes">
+                <p>"The only bad workout is the one that didn’t happen."</p>
+                <p>"Push yourself because no one else is going to do it for you."</p>
+                <p>"Your body can stand almost anything. It’s your mind that you have to convince."</p>
+            </div>
+            <p>&copy; 2025 CU_Fitness. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

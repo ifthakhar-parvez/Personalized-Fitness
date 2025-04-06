@@ -1,0 +1,520 @@
+/* General Styles */
+body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #333;
+    }
+
+.container {
+    width: 70%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header Styles */
+.header {
+    background: #2c3e50;
+    color: #fff;
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.logo img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+/* Vertical Navigation Styles */
+#vertical-nav {
+    position: fixed;
+    top: 100px;
+    left: 10px;
+    background: #b7cbdf;
+    width: 200px;
+    height: 30%;
+    padding-top: 20px;
+    color: #fff;
+}
+
+#vertical-nav a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #2c3e50;
+    font-size: 18px;
+}
+
+#vertical-nav a:hover {
+    background: #e74c3c;
+}
+
+/* User Input Section */
+#user-input {
+    padding: 20px 0;
+    background: #ecf0f1;
+}
+
+#user-input h2 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+#user-input form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+#user-input label {
+    font-size: 16px;
+}
+
+#user-input select, #user-input input {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#user-input .btn-primary {
+    background: #e74c3c;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+}
+/* Align checkboxes and labels */
+.checkbox-group {
+display: flex;
+gap: 20px; /* Adjust the space between checkboxes */
+flex-wrap: wrap; /* To make it responsive if the space is tight */
+margin-bottom: 10px; /* Optional: Adjusts spacing */
+}
+
+.checkbox-group label {
+font-size: 16px;
+display: flex;
+align-items: center;
+}
+
+.checkbox-group input {
+margin-right: 5px; /* Space between the checkbox and label text */
+}   
+/* AI Meal Suggestions -Daily */
+#meal-suggestions {
+    padding: 40px 0;
+    background: #fff;
+}
+
+#meal-suggestions h2 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+.meal-plan {
+    display: flex;
+    flex-direction: row;
+    gap: 45px;
+}
+
+.meal-card h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.meal-card p {
+    font-size: 16px;
+    color: #666;
+}
+
+.meal-card .btn-primary {
+    background: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* Meal Card Styling */
+.daily-meals {
+display: flex;
+flex-direction: row;
+gap: 20px;
+}
+
+.meal-card {
+background: #f9f9f9;
+padding: 50px;
+border-radius: 10px;
+text-align: center;
+border: 1px solid #ddd;
+}
+
+.meal-card h3 {
+font-size: 20px;
+margin-bottom: 5px;
+}
+
+.meal-card p {
+font-size: 16px;
+color: #666;
+}
+
+.btn-primary {
+background: #3498db;
+color: #fff;
+padding: 10px 15px;
+border-radius: 5px;
+font-weight: 600;
+cursor: pointer;
+border: none;
+}
+
+.recipe {
+margin-top: 10px;
+padding: 10px;
+background: #eef;
+border-radius: 5px;
+text-align: left;
+display: none; /* Hidden by default */
+}
+
+.recipe h4 {
+margin-bottom: 5px;
+}
+
+.recipe ul {
+padding-left: 20px;
+}
+
+/* Meal Logging Section - Daily Log */
+#meal-logging {
+    padding: 40px 0;
+    background: #ecf0f1;
+}
+
+#meal-logging h2 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+#meal-logging .daily-log {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.meal-log-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.meal-log-card h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.meal-log-card span {
+    font-size: 16px;
+    color: #666;
+}
+
+.meal-log-card .btn-primary {
+    background: #e74c3c;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/* Meal Logging Section - Weekly Log */
+/* Meal Log Container */
+.meal-log {
+background-color: #f8f9fa;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+width: 100%;
+max-width: 600px;
+margin: auto;
+}
+
+/* Meal Log Title */
+.meal-log h2 {
+text-align: center;
+color: #333;
+font-size: 1.5rem;
+margin-bottom: 15px;
+    }
+
+/* Meal Entry (Each Logged Meal) */
+.meal-entry {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 10px;
+margin-bottom: 10px;
+background: white;
+padding: 10px;
+border-radius: 5px;
+box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Meal Entry Input Fields */
+.meal-entry input {
+flex: 1;
+padding: 8px;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+
+/* Remove Entry Button */
+.remove-entry {
+background-color: red;
+color: white;
+border: none;
+cursor: pointer;
+padding: 5px 10px;
+border-radius: 5px;
+font-size: 14px;
+}
+
+.remove-entry:hover {
+background-color: darkred;
+}
+
+/* Add Meal Button */
+#add-meal {
+width: 100%;
+padding: 10px;
+background-color: #28a745;
+color: white;
+border: none;
+border-radius: 5px;
+font-size: 16px;
+cursor: pointer;
+margin-top: 10px;
+}
+
+#add-meal:hover {
+background-color: #218838;
+}
+
+
+/* General progress section styling */
+.progress-section {
+margin-bottom: 30px;
+ padding: 20px;
+border: 1px solid #ddd;
+border-radius: 10px;
+background-color: #f9f9f9;
+}
+
+h2, h3 {
+font-size: 1.5em;
+color: #333;
+}
+
+/* Weight Progress Bar - Showing distance from target weight */
+.progress-bar-weight {
+ width: 100%;
+height: 25px;
+background-color: #f0f0f0;
+border-radius: 12px;
+margin-top: 10px;
+}
+
+.progress-bar-weight span {
+display: block;
+height: 100%;
+background-color: #3498db; /* Blue color */
+border-radius: 12px;
+}
+
+/* Daily Calorie Intake Progress Bar */
+.progress-bar-calories {
+width: 100%;
+height: 25px;
+background-color: #f0f0f0;
+border-radius: 12px;
+margin-top: 10px;
+}
+
+.progress-bar-calories span {
+display: block;
+height: 100%;
+background-color: #3498db; /* Blue color */
+border-radius: 12px;
+}
+
+/* Weekly Budget Bar */
+.progress-bar-budget {
+width: 100%;
+height: 25px;
+background-color: #f0f0f0;
+border-radius: 12px;
+margin-top: 10px;
+}
+
+.progress-bar-budget span {
+display: block;
+height: 100%;
+background-color: #3498db; /* Blue color */
+border-radius: 12px;
+}
+
+/* Styling for Past Calorie Intake Graph */
+#calorie-graph {
+margin-top: 40px;
+width: 100%;
+max-width: 800px;
+margin: 0 auto;
+}
+
+
+/* Footer Section */
+footer {
+    background: #2c3e50;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+footer .social-links img {
+    height: 24px;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1024px) {
+    .header .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    #vertical-nav {
+        top: 80px;
+        width: 150px;
+        padding-top: 10px;
+    }
+
+    #user-input form {
+        width: 100%;
+    }
+
+    .weekly-schedule, .weekly-log {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .day-card, .logged-meal-card {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+
+    .progress-bar, .budget-bar {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    #vertical-nav {
+        top: 60px;
+        width: 120px;
+    }
+
+    #meal-suggestions h2,
+    #meal-logging h2,
+    #progress-tracker h2 {
+        font-size: 28px;
+    }
+
+    .day-card, .logged-meal-card {
+        width: 100%;
+    }
+
+    .container {
+        width: 95%;
+    }
+}
+
+@media (max-width: 480px) {
+    #vertical-nav {
+        top: 50px;
+        width: 100px;
+    }
+
+    .day-card, .logged-meal-card {
+        width: 100%;
+    }
+
+    #user-input h2 {
+        font-size: 24px;
+    }
+
+    #user-input form {
+        padding: 10px;
+    }
+}
