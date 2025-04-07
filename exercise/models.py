@@ -1,5 +1,7 @@
 from django.db import models
 from database.models import CustomUser  # ✅ Import shared UserProfile model
+from django.conf import settings
+
 
 
 # Workout Plan Model
@@ -83,3 +85,14 @@ class WorkoutLog(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.exercise} ({self.date})"
+    
+# models.py
+class DailyExerciseLog(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    duration_minutes = models.PositiveIntegerField()
+    calories_burned = models.FloatField(default=0.0)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.title} - {self.timestamp.date()}"

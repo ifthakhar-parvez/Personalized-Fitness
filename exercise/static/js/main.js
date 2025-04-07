@@ -237,26 +237,6 @@ async function renderWorkoutChart() {
     }
 }
 
-// ✅ main.js: Personalized Workout Fetching
-
-// Add this at the bottom of your JS file or in the section with event listeners
-
-document.getElementById("get-plan-btn")?.addEventListener("click", async () => {
-    const goal = document.getElementById("goal-select").value;
-    const level = document.getElementById("level-select").value;
-
-    try {
-        const response = await fetch(`/api/personalized_workout/?goal=${goal}&level=${level}`);
-        const data = await response.json();
-
-        const output = data.plan || "No plan available.";
-        document.getElementById("personalized-workout-result").innerHTML = `<p>${output}</p>`;
-    } catch (err) {
-        console.error("Failed to fetch plan", err);
-        document.getElementById("personalized-workout-result").innerHTML = "⚠️ Could not fetch personalized plan.";
-    }
-});
-
 document.getElementById("start-custom-rest")?.addEventListener("click", () => {
     let time = parseInt(document.getElementById("custom-rest-time").value);
     const display = document.getElementById("custom-rest-display");
@@ -284,3 +264,94 @@ window.addEventListener('load', renderWorkoutChart);
 
 // Auto-render chart on page load
 window.addEventListener('load', renderWorkoutChart);
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("exercise-log-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const title = document.getElementById("exercise-title").value.trim();
+        const durationStr = document.getElementById("daily-duration").value.trim();
+const duration = parseInt(durationStr);
+
+// Check if both fields are valid
+if (!title.trim() || isNaN(duration) || duration <= 0) {
+    document.getElementById("log-result").innerText = "❌ Invalid input.";
+    return;
+}
+
+      
+
+        console.log("🚀 Sending to backend:", { title, duration_minutes: duration });
+
+        fetch("/api/daily_exercises/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            body: JSON.stringify({
+                title: title,
+                duration_minutes: duration,
+            }),
+        })
+        .then((res) => {
+            if (!res.ok) {
+                return res.json().then(data => {
+                    console.error("❌ Backend error:", data);
+                    throw new Error("Logging failed");
+                });
+            }
+            return res.json();
+        })
+        .then((data) => {
+            console.log("✅ Log success:", data);
+            document.getElementById("log-result").innerText = "✅ Exercise logged successfully!";
+        })
+        .catch((err) => {
+            console.error("❌ Logging failed:", err.message);
+            document.getElementById("log-result").innerText = "❌ Failed to log exercise.";
+        });
+    });
+
+    document.getElementById("fetch-summary").addEventListener("click", function () {
+        fetch("/api/daily_summary/")
+            .then((res) => res.json())
+            .then((data) => {
+                const html = `
+                    <p>🗓️ Date: ${data.date}</p>
+                    <p>🧘‍♂️ Exercises: ${data.exercise_titles.join(", ")}</p>
+                    <p>🔥 Total Calories Burned: ${data.total_calories_burned} kcal</p>
+                    <p>⏱️ Total Duration: ${data.total_duration_minutes} minutes</p>
+                `;
+                document.getElementById("summary-result").innerHTML = html;
+            })
+            .catch((err) => {
+                console.error(err);
+                document.getElementById("summary-result").innerText = "❌ Failed to fetch summary.";
+            });
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+            const cookies = document.cookie.split(";");
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + "=")) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const mealSection = document.getElementById("ai-meal-section");
+    if (mealSection) {
+      mealSection.style.display = "none";  // ✅ Hide AI meal suggestion section
+    }
+  });
+  
+  

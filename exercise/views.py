@@ -3,8 +3,8 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import WorkoutPlan, NutritionPlan, ProgressTracker, WorkoutLog
-from .serializers import WorkoutPlanSerializer, NutritionPlanSerializer, ProgressTrackerSerializer, CustomUserSerializer
+from .models import WorkoutPlan, NutritionPlan, ProgressTracker, WorkoutLog, DailyExerciseLog
+from .serializers import WorkoutPlanSerializer, NutritionPlanSerializer, ProgressTrackerSerializer, CustomUserSerializer, DailyExerciseLogSerializer
 from .ai_suggestions import get_workout_suggestion, get_nutrition_suggestion
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -12,6 +12,27 @@ from rest_framework.views import APIView
 from database.models import CustomUser
 from django.conf import settings
 import requests
+from django.utils import timezone
+
+
+CALORIE_BURN_RATES = {
+    "walking": 4.0,
+    "running": 10.0,
+    "cycling": 8.0,
+    "yoga": 3.0,
+    "strength_training": 6.0,
+    "jump_rope": 12.0,
+    "aerobics": 7.0,
+    "swimming": 9.0,
+    "default": 5.0
+}
+
+def estimate_calories(exercise_title, duration_minutes):
+    key = exercise_title.lower().replace(" ", "_")
+    rate = CALORIE_BURN_RATES.get(key, CALORIE_BURN_RATES["default"])
+    return round(rate * duration_minutes, 2)
+
+
 
 
 def home(request):
@@ -69,21 +90,49 @@ def get_meal_recommendation(request):
 @permission_classes([AllowAny])
 def ai_chatbot(request):
     user_message = request.data.get("message", "")
+
+    system_prompt = (
+        "You are a helpful fitness assistant named SoftGrid. Always focus your answers on fitness, health, diet, gym tips, "
+        "workouts, motivation, and wellness. Stay friendly and professional. Avoid topics unrelated to fitness."
+    )
+
+    # 🛠️ Clean history and ensure all items are strings
+    history = request.session.get("chat_history", [])
+    history = [str(h) for h in history if isinstance(h, str)]
+    history.append(f"<|user|>\n{user_message}\n<|assistant|>")
+    history = history[-5:]
+    request.session["chat_history"] = history
+
+    conversation = f"<|system|>\n{system_prompt}\n" + "\n".join(history)
+
     api_url = "https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta"
     headers = {
         "Authorization": f"Bearer {settings.HUGGINGFACE_API_TOKEN}"
     }
-    payload = {
-        "inputs": f"<|user|>\n{user_message}\n<|assistant|>"
-    }
+    payload = {"inputs": conversation}
+
     try:
         response = requests.post(api_url, headers=headers, json=payload)
         response.raise_for_status()
-        generated_text = response.json()[0].get("generated_text", "")
+
+        response_data = response.json()
+        if not isinstance(response_data, list) or "generated_text" not in response_data[0]:
+            return Response({"error": "⚠️ Invalid response from Hugging Face API."}, status=500)
+
+        generated_text = response_data[0]["generated_text"]
         reply = generated_text.split("<|assistant|>")[-1].strip()
+
+        # ✅ Save full reply in history
+        history[-1] += reply
+        request.session["chat_history"] = history
+
         return Response({"response": reply})
+
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return Response({"error": str(e)}, status=500)
+
 
 
 class ProgressTrackerViewSet(viewsets.ModelViewSet):
@@ -152,6 +201,7 @@ class WorkoutChartDataAPIView(APIView):
         reps = [log.reps for log in logs]
         sets = [log.sets for log in logs]
         duration = [log.duration_minutes for log in logs]
+
         return Response({
             "labels": labels,
             "reps": reps,
@@ -160,31 +210,46 @@ class WorkoutChartDataAPIView(APIView):
         })
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_personalized_workout(request):
-    try:
-        user = CustomUser.objects.get(id=request.user.id)
-        goal = getattr(user, 'goal', 'maintain')
-        level = getattr(user, 'fitness_level', 'beginner')
-        plans = {
-            ('weight_loss', 'beginner'): "Try 20 mins cardio + bodyweight exercises.",
-            ('weight_loss', 'intermediate'): "Include HIIT sessions + light weights.",
-            ('weight_loss', 'advanced'): "High-intensity circuits with progressive overload.",
-            ('muscle_gain', 'beginner'): "Focus on compound lifts: 3 sets x 10 reps.",
-            ('muscle_gain', 'intermediate'): "Split workouts (push/pull/legs) 4x a week.",
-            ('muscle_gain', 'advanced'): "Heavy lifting with periodization techniques.",
-            ('maintain', 'beginner'): "Light full-body workouts 3x a week.",
-            ('maintain', 'intermediate'): "3–4 sessions mixing strength & cardio.",
-            ('maintain', 'advanced'): "Functional training + deload weeks."
-        }
-        key = (goal, level)
-        plan = plans.get(key, "No personalized plan available.")
-        return Response({"plan": plan})
-    except CustomUser.DoesNotExist:
-        return Response({"error": "User profile not found."}, status=404)
+
+# ✅ Only keep one correct version of DailyExerciseLogViewSet with calorie calculation logic
+class DailyExerciseLogViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = DailyExerciseLogSerializer
+
+    def get_queryset(self):
+        return DailyExerciseLog.objects.filter(user=self.request.user).order_by('-timestamp')
+
+    def perform_create(self, serializer):
+        title = serializer.validated_data.get("title", "")
+        duration = serializer.validated_data.get("duration_minutes", 0)
+        calories = estimate_calories(title, duration)
+        serializer.save(user=self.request.user, calories_burned=calories)
 
 
+
+
+# ✅ Keep UserProfileViewSet as it is
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+
+
+# ✅ Daily Summary View
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def daily_summary(request):
+    today = timezone.now().date()
+    logs = DailyExerciseLog.objects.filter(user=request.user, timestamp__date=today)
+
+    total_duration = sum(log.duration_minutes for log in logs)
+    total_calories = sum(log.calories_burned for log in logs)
+    exercises = [log.title for log in logs]
+
+    return Response({
+        "date": str(today),
+        "total_exercises": len(exercises),
+        "total_duration_minutes": total_duration,
+        "total_calories_burned": total_calories,
+        "exercise_titles": exercises,
+    })

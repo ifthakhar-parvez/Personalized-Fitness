@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CU_Fitness</title>
+    <title>CUFitness</title>
     <link rel="stylesheet" type="text/css" href="{% static 'exercise/styles.css' %}">
 
 
@@ -22,14 +22,15 @@
                 <a href="/">
                     <img src="{% static 'exercise/images/favicon.ico' %}" alt="CU_Fitness Logo" width="40" height="40">
                 </a>
-                <span style="font-size: 24px; font-weight: bold; color: white;">CU_Fitness</span>
+                <span style="font-size: 24px; font-weight: bold; color: white;">CUFitness</span>
               </div>
               
-          <nav>
-            <a href="#">Home</a>
-            <a href="#">Profile</a>
-            <a href="#">Nutrition</a>
-          </nav>
+              <nav>
+                <a href="{% url 'fitness-home' %}">Home</a>          <!-- ✅ maps to /fitness/ -->
+                <a href="/explore/">Explore</a>                      <!-- ✅ maps to /explore/ -->
+                <a href="/nutrition/">Nutrition</a>                  <!-- ✅ maps to /nutrition/ -->
+              </nav>
+              
         </div>
       </header>
       
@@ -65,6 +66,29 @@
   </div>
 
   
+<!-- ✅ Daily Exercise Logger -->
+<!-- ✅ Daily Exercise Logger -->
+<div class="section">
+    <h2>🏃 Log Your Daily Exercise</h2>
+    <form id="exercise-log-form">
+      <input type="text" id="exercise-title" placeholder="Exercise (e.g., Running)" required />
+      <input type="number" id="daily-duration" placeholder="Duration in minutes" required />  <!-- changed -->
+      <button type="submit">Log Exercise</button>
+    </form>
+    <div id="log-result" style="margin-top: 10px;"></div>
+  </div>
+  
+  
+  <!-- ✅ Daily Summary -->
+  <div class="section" style="margin-top: 30px;">
+    <h2>📈 Daily Summary</h2>
+    <button id="fetch-summary">Get Today's Summary</button>
+    <div id="summary-result" style="margin-top: 10px;"></div>
+  </div>
+  
+  
+  
+
         <!-- ✅ BMI Calculator Section -->
         <div class="section bmi-calculator">
             <h2>BMI Calculator</h2>
@@ -77,27 +101,6 @@
         </div>
 
        
-        <div class="section" id="personalized-workout-section">
-            <h2>🎯 Personalized Workout Plan</h2>
-        
-            <label for="goal-select">Your Goal:</label>
-            <select id="goal-select">
-                <option value="weight_loss">Weight Loss</option>
-                <option value="muscle_gain">Muscle Gain</option>
-                <option value="maintain">Maintain</option>
-            </select>
-        
-            <label for="level-select">Fitness Level:</label>
-            <select id="level-select">
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-            </select>
-        
-            <button id="get-plan-btn">Get My Plan</button>
-        
-            <div id="personalized-workout-result" style="margin-top: 15px;"></div>
-        </div>
 
         <!-- ✅ Custom Rest Timer Section -->
 <div class="section">
@@ -128,6 +131,7 @@
             </div>
         </div>
 
+        
         <!-- ✅ AI-Generated Meal Plan Suggestions -->
         <div class="section" id="ai-meal-section">
             <h2>🍽️ AI Meal Plan Suggestions</h2>

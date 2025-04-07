@@ -21,7 +21,5 @@ class ProgressTrackerAdmin(admin.ModelAdmin):
 
 # Register only what belongs to this app
 admin.site.register(WorkoutPlan, WorkoutPlanAdmin)
-admin.site.register(NutritionPlan, NutritionPlanAdmin)
 admin.site.register(ProgressTracker, ProgressTrackerAdmin)
 admin.site.register(WorkoutLog)
-admin.site.register(MealPlan)

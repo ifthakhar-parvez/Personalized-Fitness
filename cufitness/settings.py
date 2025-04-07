@@ -134,4 +134,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 GROQ_API_KEY = "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"
 
-HUGGINGFACE_API_TOKEN = "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" 
+HUGGINGFACE_API_TOKEN = "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"
