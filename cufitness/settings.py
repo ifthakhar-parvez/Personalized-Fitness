@@ -134,8 +134,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 GROQ_API_KEY = "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"
 
-import os
-HUGGINGFACE_API_TOKEN = os.environ.get("HUGGINGFACE_API_TOKEN")
-
-from dotenv import load_dotenv
-load_dotenv()
+HUGGINGFACE_API_TOKEN = "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"
